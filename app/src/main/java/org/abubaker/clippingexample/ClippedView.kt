@@ -6,6 +6,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 
+
 class ClippedView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -83,6 +84,18 @@ class ClippedView @JvmOverloads constructor(
     // Final row for the transformed text
     // = ((8dp | 10dp) + (8dp | 10dp) +  (90dp | 120dp)) + (1.5f * (90dp | 120dp))
     private val textRow = rowFour + (1.5f * clipRectBottom)
+
+    // RectF is a class that holds rectangle coordinates in floating point.
+    private var rectF = RectF(
+        rectInset,
+        rectInset,
+        clipRectRight - rectInset,
+        clipRectBottom - rectInset
+    )
+
+    //
+    private val rejectRow = rowFour + rectInset + 2 * clipRectBottom
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -274,6 +287,7 @@ class ClippedView @JvmOverloads constructor(
         // keeps the internal data structure for faster reuse.
         path.rewind()
 
+        // Circular path
         path.addCircle(
             circleRadius, clipRectBottom - circleRadius,
             circleRadius, Path.Direction.CCW
@@ -301,43 +315,283 @@ class ClippedView @JvmOverloads constructor(
      * 04 - Intersection Clipping
      */
     private fun drawIntersectionClippingExample(canvas: Canvas) {
+
+        // Save the canvas.
+        canvas.save()
+
+        // Move the origin to the right for the next rectangle.
+        // Column: 2
+        // Row: 2
+        canvas.translate(columnTwo, rowTwo)
+
+        //
+        canvas.clipRect(
+            clipRectLeft, clipRectTop,
+            clipRectRight - smallRectOffset,
+            clipRectBottom - smallRectOffset
+        )
+
+        // The method clipRect(float, float, float, float, Region.Op
+        // .INTERSECT) was deprecated in API level 26. The recommended
+        // alternative method is clipRect(float, float, float, float), which
+        // is currently available in API level 26 and higher.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+
+            canvas.clipRect(
+                clipRectLeft + smallRectOffset,
+                clipRectTop + smallRectOffset,
+                clipRectRight, clipRectBottom,
+                Region.Op.INTERSECT
+            )
+
+        } else {
+
+            canvas.clipRect(
+                clipRectLeft + smallRectOffset,
+                clipRectTop + smallRectOffset,
+                clipRectRight, clipRectBottom
+            )
+
+        }
+
+        // Draw the modified canvas.
+        drawClippedRectangle(canvas)
+
+        // Restore the canvas state.
+        canvas.restore()
+
     }
 
     /**
      * 05 - Combined Clipping
      */
     private fun drawCombinedClippingExample(canvas: Canvas) {
+
+        // Save the canvas.
+        canvas.save()
+
+        // Move the origin to the right for the next rectangle.
+        // Column: 1
+        // Row: 3
+        canvas.translate(columnOne, rowThree)
+
+        //
+        path.rewind()
+
+        //
+        path.addCircle(
+            clipRectLeft + rectInset + circleRadius,
+            clipRectTop + circleRadius + rectInset,
+            circleRadius, Path.Direction.CCW
+        )
+
+        //
+        path.addRect(
+            clipRectRight / 2 - circleRadius,
+            clipRectTop + circleRadius + rectInset,
+            clipRectRight / 2 + circleRadius,
+            clipRectBottom - rectInset, Path.Direction.CCW
+        )
+
+        //
+        canvas.clipPath(path)
+
+        // Draw the modified canvas.
+        drawClippedRectangle(canvas)
+
+        // Restore the canvas state.
+        canvas.restore()
+
     }
 
     /**
      * 06 - Rounded Rectangle Clipping
      */
     private fun drawRoundedRectangleClippingExample(canvas: Canvas) {
+
+        // Save the canvas.
+        canvas.save()
+
+        // Move the origin to the right for the next rectangle.
+        // Column: 2
+        // Row: 3
+        canvas.translate(columnTwo, rowThree)
+
+        //
+        path.rewind()
+
+        // 1. The addRoundRect() function takes a rectangle.
+        // 2. Values for the x and y values of the corner radius.
+        // 3. The direction to wind the round-rectangle's contour.
+        // 4. Path.Direction specifies how closed shapes (e.g. rects, ovals) are oriented when
+        //    they are added to a path. CCW stands for counter-clockwise.
+        path.addRoundRect(
+            rectF, clipRectRight / 4,
+            clipRectRight / 4, Path.Direction.CCW
+        )
+
+        //
+        canvas.clipPath(path)
+
+        //
+        drawClippedRectangle(canvas)
+
+        // Restore the canvas state.
+        canvas.restore()
+
     }
 
     /**
      * 07 - Outside Clipping
      */
     private fun drawOutsideClippingExample(canvas: Canvas) {
+
+        // Save the canvas.
+        canvas.save()
+
+        // Move the origin to the right for the next rectangle.
+        // Column: 1
+        // Row: 4
+        canvas.translate(columnOne, rowFour)
+
+        //
+        canvas.clipRect(
+            2 * rectInset, 2 * rectInset,
+            clipRectRight - 2 * rectInset,
+            clipRectBottom - 2 * rectInset
+        )
+
+        //
+        drawClippedRectangle(canvas)
+
+        // Restore the canvas state.
+        canvas.restore()
+
     }
 
     /**
      * 08 - Translated Text
      */
     private fun drawTranslatedTextExample(canvas: Canvas) {
+
+        // Save the canvas.
+        canvas.save()
+
+        //
+        paint.color = Color.GREEN
+
+        // Align the RIGHT side of the text with the origin.
+        paint.textAlign = Paint.Align.LEFT
+
+        // Move the origin to the right for the next rectangle.
+        // Column: 2
+        // Row: Text Row
+        canvas.translate(columnTwo, textRow)
+
+        // Draw text.
+        canvas.drawText(
+            context.getString(R.string.translated),
+            clipRectLeft, clipRectTop, paint
+        )
+
+        // Restore the canvas state.
+        canvas.restore()
+
     }
 
     /**
      * 09 - Skewed Text
      */
     private fun drawSkewedTextExample(canvas: Canvas) {
+
+        // Save the canvas.
+        canvas.save()
+
+        //
+        paint.color = Color.YELLOW
+
+        //
+        paint.textAlign = Paint.Align.RIGHT
+
+        // Move the origin to the right for the next rectangle.
+        // Column: 2
+        // Row: Text Row
+        canvas.translate(columnTwo, textRow)
+
+        // Apply skew transformation.
+        canvas.skew(0.2f, 0.3f)
+
+        //
+        canvas.drawText(
+            context.getString(R.string.skewed),
+            clipRectLeft, clipRectTop, paint
+        )
+
+        // Restore the canvas state.
+        canvas.restore()
+
     }
 
     /**
      * 10 - Quick Reject
      */
     private fun drawQuickRejectExample(canvas: Canvas) {
+
+        val inClipRectangle = RectF(
+            clipRectRight / 2,
+            clipRectBottom / 2,
+            clipRectRight * 2,
+            clipRectBottom * 2
+        )
+
+        val notInClipRectangle = RectF(
+            RectF(
+                clipRectRight + 1,
+                clipRectBottom + 1,
+                clipRectRight * 2,
+                clipRectBottom * 2
+            )
+        )
+
+        // Save the canvas.
+        canvas.save()
+
+        // Position
+        // Column: 1
+        // Row: Reject Row
+        canvas.translate(columnOne, rejectRow)
+
+        canvas.clipRect(
+            clipRectLeft, clipRectTop,
+            clipRectRight, clipRectBottom
+        )
+
+        if (canvas.quickReject(
+                inClipRectangle, Canvas.EdgeType.AA
+            )
+        ) {
+            canvas.drawColor(Color.WHITE)
+        } else {
+            canvas.drawColor(Color.BLACK)
+            canvas.drawRect(
+                inClipRectangle, paint
+            )
+        }
+
+        // Restore the canvas state.
+        canvas.restore()
+
     }
 
 
 }
+
+/**
+ * Note:
+ * ====
+ * 1. When you use View classes provided by the Android system, the system clips views for you to
+ *    minimize overdraw.
+ *
+ * 2. When you use custom View classes and override the onDraw() method, clipping what you
+ *    draw becomes your responsibility.
+ */
