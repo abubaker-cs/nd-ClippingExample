@@ -190,6 +190,8 @@ class ClippedView @JvmOverloads constructor(
         canvas.save()
 
         // Translate to the first row and column position.
+        // Column: 1
+        // Row: 1
         canvas.translate(columnOne, rowOne)
 
         // Draw by calling drawClippedRectangle()
@@ -205,13 +207,17 @@ class ClippedView @JvmOverloads constructor(
      */
     private fun drawDifferenceClippingExample(canvas: Canvas) {
 
-        //
+        // Save the canvas.
         canvas.save()
 
         // Move the origin to the right for the next rectangle.
+        // Translate the origin of the canvas into open space to the first row, second column, to the right of the first rectangle.
+        // Column: 2
+        // Row: 1
         canvas.translate(columnTwo, rowOne)
 
         // Use the subtraction of two clipping rectangles to create a frame.
+        // Apply two clipping rectangles. The DIFFERENCE operator subtracts the second rectangle from the first one.
         canvas.clipRect(
             2 * rectInset, 2 * rectInset,
             clipRectRight - 2 * rectInset,
@@ -224,6 +230,7 @@ class ClippedView @JvmOverloads constructor(
         // which is currently available in API level 26 and higher.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
 
+        // The method clipRect(float, float, float, float, Region.Op.DIFFERENCE) was deprecated in API level 26.
             canvas.clipRect(
                 4 * rectInset, 4 * rectInset,
                 clipRectRight - 4 * rectInset,
@@ -232,6 +239,8 @@ class ClippedView @JvmOverloads constructor(
             )
         else {
 
+            // The recommended alternative method is clipOutRect(float, float, float, float),
+            // which is currently available in API level 26 and higher.
             canvas.clipOutRect(
                 4 * rectInset, 4 * rectInset,
                 clipRectRight - 4 * rectInset,
@@ -240,10 +249,10 @@ class ClippedView @JvmOverloads constructor(
 
         }
 
-        // Draws the clipped mask
+        // Draw the modified canvas.
         drawClippedRectangle(canvas)
 
-        //
+        // Restore the canvas state.
         canvas.restore()
 
     }
@@ -252,6 +261,40 @@ class ClippedView @JvmOverloads constructor(
      * 03 - Circular Clipping
      */
     private fun drawCircularClippingExample(canvas: Canvas) {
+
+        // Save the canvas.
+        canvas.save()
+
+        // Move the origin to the right for the next rectangle.
+        // Column: 1
+        // Row: 2
+        canvas.translate(columnOne, rowTwo)
+
+        // Clears any lines and curves from the path but unlike reset(),
+        // keeps the internal data structure for faster reuse.
+        path.rewind()
+
+        path.addCircle(
+            circleRadius, clipRectBottom - circleRadius,
+            circleRadius, Path.Direction.CCW
+        )
+
+        // The method clipPath(path, Region.Op.DIFFERENCE) was deprecated in
+        // API level 26. The recommended alternative method is
+        // clipOutPath(Path), which is currently available in
+        // API level 26 and higher.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            canvas.clipPath(path, Region.Op.DIFFERENCE)
+        } else {
+            canvas.clipOutPath(path)
+        }
+
+        // Draw the modified canvas.
+        drawClippedRectangle(canvas)
+
+        // Restore the canvas state.
+        canvas.restore()
+
     }
 
     /**
