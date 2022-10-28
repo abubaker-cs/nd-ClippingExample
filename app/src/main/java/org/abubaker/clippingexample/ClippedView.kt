@@ -193,6 +193,7 @@ class ClippedView @JvmOverloads constructor(
         canvas.drawColor(Color.GRAY)
 
         // Save the canvas
+        //
         canvas.save()
 
         // Translate to the first row and column position.
@@ -202,6 +203,7 @@ class ClippedView @JvmOverloads constructor(
         drawClippedRectangle(canvas)
 
         // Then restore the canvas to its previous state
+        //
         canvas.restore()
     }
 
