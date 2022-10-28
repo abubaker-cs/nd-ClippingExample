@@ -88,93 +88,93 @@ class ClippedView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        // 01 -
+        // 01 - Back & Un-clipped
         drawBackAndUnclippedRectangle(canvas)
 
-        // 02 -
+        // 02 - Difference Clipping
         drawDifferenceClippingExample(canvas)
 
-        // 03 -
+        // 03 - Circular Clipping
         drawCircularClippingExample(canvas)
 
-        // 04 -
+        // 04 - Intersection  Clipping
         drawIntersectionClippingExample(canvas)
 
-        // 05 -
+        // 05 - Combined Clipping
         drawCombinedClippingExample(canvas)
 
-        // 06 -
+        // 06 - Rounded Rectangle Clipping
         drawRoundedRectangleClippingExample(canvas)
 
-        // 07 -
+        // 07 - Outside Clipping
         drawOutsideClippingExample(canvas)
 
-        // 08 -
+        // 08 - Skewed Text
         drawSkewedTextExample(canvas)
 
-        // 09 -
+        // 09 - Translated Text
         drawTranslatedTextExample(canvas)
 
-        // 10 -
+        // 10 - Quick Reject
         drawQuickRejectExample(canvas)
     }
 
     /**
-     * 01 -
+     * 01 - Back & Un-clipped
      */
     private fun drawBackAndUnclippedRectangle(canvas: Canvas) {
     }
 
     /**
-     * 02 -
+     * 02 - Difference Clipping
      */
     private fun drawDifferenceClippingExample(canvas: Canvas) {
     }
 
     /**
-     * 03 -
+     * 03 - Circular Clipping
      */
     private fun drawCircularClippingExample(canvas: Canvas) {
     }
 
     /**
-     * 04 -
+     * 04 - Intersection Clipping
      */
     private fun drawIntersectionClippingExample(canvas: Canvas) {
     }
 
     /**
-     * 05 -
+     * 05 - Combined Clipping
      */
     private fun drawCombinedClippingExample(canvas: Canvas) {
     }
 
     /**
-     * 06 -
+     * 06 - Rounded Rectangle Clipping
      */
     private fun drawRoundedRectangleClippingExample(canvas: Canvas) {
     }
 
     /**
-     * 07 -
+     * 07 - Outside Clipping
      */
     private fun drawOutsideClippingExample(canvas: Canvas) {
     }
 
     /**
-     * 08 -
+     * 08 - Translated Text
      */
     private fun drawTranslatedTextExample(canvas: Canvas) {
     }
 
     /**
-     * 09 -
+     * 09 - Skewed Text
      */
     private fun drawSkewedTextExample(canvas: Canvas) {
     }
 
     /**
-     * 10 -
+     * 10 - Quick Reject
      */
     private fun drawQuickRejectExample(canvas: Canvas) {
     }
