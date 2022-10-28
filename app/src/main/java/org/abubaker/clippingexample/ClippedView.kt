@@ -2,6 +2,7 @@ package org.abubaker.clippingexample
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
@@ -88,6 +89,8 @@ class ClippedView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        drawClippedRectangle(canvas)
+
         // 01 - Back & Un-clipped
         drawBackAndUnclippedRectangle(canvas)
 
@@ -120,9 +123,86 @@ class ClippedView @JvmOverloads constructor(
     }
 
     /**
+     * 00 - Clipped Rectangle
+     */
+    private fun drawClippedRectangle(canvas: Canvas) {
+
+        /**
+         * 01
+         * Set the boundaries of the clipping rectangle for the whole shape
+         * Apply a clipping rectangle that constrains to drawing only the square
+         */
+
+        // Left, Top, Right, Bottom
+        canvas.clipRect(
+            clipRectLeft, clipRectTop,
+            clipRectRight, clipRectBottom
+        )
+
+        // Fill: White Color
+        // Add code to fill the canvas with white color. Only the region inside the clipping rectangle will be filled!
+        canvas.drawColor(Color.WHITE)
+
+        /**
+         * 02
+         * Change the color to red and draw a diagonal line inside the clipping rectangle.
+         */
+
+        paint.color = Color.RED
+
+        // Left, Top, Right, Bottom, Paint
+        canvas.drawLine(
+            clipRectLeft, clipRectTop,
+            clipRectRight, clipRectBottom,
+            paint
+        )
+
+        /**
+         * 03
+         * Set the color to green and draw a circle inside the clipping rectangle.
+         */
+        paint.color = Color.GREEN
+        canvas.drawCircle(
+            circleRadius,
+            clipRectBottom - circleRadius,
+            circleRadius,
+            paint
+        )
+
+        /**
+         * 04 Text
+         * Set the color to blue and draw text aligned with the right edge of the clipping rectangle.
+         * Use Canvas.drawText() to draw text.
+         */
+        paint.color = Color.BLUE
+        paint.textAlign = Paint.Align.RIGHT
+        canvas.drawText(
+            context.getString(R.string.clipping),
+            clipRectRight, textOffset, paint
+        )
+
+
+    }
+
+    /**
      * 01 - Back & Un-clipped
      */
     private fun drawBackAndUnclippedRectangle(canvas: Canvas) {
+
+        // Color of the BORDER / PATH
+        canvas.drawColor(Color.GRAY)
+
+        // Save the canvas
+        canvas.save()
+
+        // Translate to the first row and column position.
+        canvas.translate(columnOne, rowOne)
+
+        // Draw by calling drawClippedRectangle()
+        drawClippedRectangle(canvas)
+
+        // Then restore the canvas to its previous state
+        canvas.restore()
     }
 
     /**
