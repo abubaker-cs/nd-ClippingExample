@@ -1,6 +1,7 @@
 package org.abubaker.clippingexample
 
 import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
@@ -83,5 +84,100 @@ class ClippedView @JvmOverloads constructor(
     // Final row for the transformed text
     // = ((8dp | 10dp) + (8dp | 10dp) +  (90dp | 120dp)) + (1.5f * (90dp | 120dp))
     private val textRow = rowFour + (1.5f * clipRectBottom)
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        // 01 -
+        drawBackAndUnclippedRectangle(canvas)
+
+        // 02 -
+        drawDifferenceClippingExample(canvas)
+
+        // 03 -
+        drawCircularClippingExample(canvas)
+
+        // 04 -
+        drawIntersectionClippingExample(canvas)
+
+        // 05 -
+        drawCombinedClippingExample(canvas)
+
+        // 06 -
+        drawRoundedRectangleClippingExample(canvas)
+
+        // 07 -
+        drawOutsideClippingExample(canvas)
+
+        // 08 -
+        drawSkewedTextExample(canvas)
+
+        // 09 -
+        drawTranslatedTextExample(canvas)
+
+        // 10 -
+        drawQuickRejectExample(canvas)
+    }
+
+    /**
+     * 01 -
+     */
+    private fun drawBackAndUnclippedRectangle(canvas: Canvas) {
+    }
+
+    /**
+     * 02 -
+     */
+    private fun drawDifferenceClippingExample(canvas: Canvas) {
+    }
+
+    /**
+     * 03 -
+     */
+    private fun drawCircularClippingExample(canvas: Canvas) {
+    }
+
+    /**
+     * 04 -
+     */
+    private fun drawIntersectionClippingExample(canvas: Canvas) {
+    }
+
+    /**
+     * 05 -
+     */
+    private fun drawCombinedClippingExample(canvas: Canvas) {
+    }
+
+    /**
+     * 06 -
+     */
+    private fun drawRoundedRectangleClippingExample(canvas: Canvas) {
+    }
+
+    /**
+     * 07 -
+     */
+    private fun drawOutsideClippingExample(canvas: Canvas) {
+    }
+
+    /**
+     * 08 -
+     */
+    private fun drawTranslatedTextExample(canvas: Canvas) {
+    }
+
+    /**
+     * 09 -
+     */
+    private fun drawSkewedTextExample(canvas: Canvas) {
+    }
+
+    /**
+     * 10 -
+     */
+    private fun drawQuickRejectExample(canvas: Canvas) {
+    }
+
 
 }
